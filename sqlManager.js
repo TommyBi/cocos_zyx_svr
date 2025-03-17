@@ -3,7 +3,7 @@ const mysql = require('mysql2');
 const pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
-    password: 'Yrb13145211',
+    password: 'Yrb1314521',
     database: 'user',
     connectionLimit: 10,       // 最大连接数
     queueLimit: 50,           // 等待队列的最大数量
@@ -31,13 +31,21 @@ function queryUserByUserId(userId) {
 }
 
 // 注册用户
-function registerUser(openId, nickName, avatarUrl) {
-    return new Promise((resolve, reject) => {
-        pool.query('INSERT INTO userSheet (openId) VALUES (?)', [openId], (err, result) => {
-            if (err) return reject(err);
-            resolve(result);
-        });
-    });
+async function registerUser(openId, nickName, avatarUrl) {
+    try {
+        // 执行插入操作
+        const [result] = await pool.promise().query('INSERT INTO userSheet (openId, nickName, avatar) VALUES (?,?,?)', [openId, nickName, avatarUrl]);
+        console.log('注册成功', result);
+
+        // 获取插入记录的自增主键 userId
+        const userId = result.insertId;
+
+        // 查询刚注册的用户数据
+        const [rows] = await pool.promise().query('SELECT * FROM userSheet WHERE userId = ?', [userId]);
+        return rows[0];
+    } catch (err) {
+        throw err;
+    }
 }
 /**
   更新用户信息（使用事务的方式进行数据库的修改提交操作, 其中涉及到beginTransaction 和 commit 的操作行为组合）
@@ -68,9 +76,9 @@ async function updateUserInfo(openId, newInfo) {
 
 // 定期检查连接池状态
 setInterval(() => {
-    console.log(`Active connections: ${pool._allConnections.length}`);
-    console.log(`Idle connections: ${pool._freeConnections.length}`);
-    console.log(`Waiting for connection: ${pool._connectionQueue.length}`);
+    // console.log(`Active connections: ${pool._allConnections.length}`);
+    // console.log(`Idle connections: ${pool._freeConnections.length}`);
+    // console.log(`Waiting for connection: ${pool._connectionQueue.length}`);
 }, 10000);
 
 module.exports = {
