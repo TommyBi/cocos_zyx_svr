@@ -29,7 +29,11 @@ const sqlManager = require('./sqlManager');
 const util = require('./util');
 const express = require('express');
 const helmet = require('helmet');
+const cors = require('cors');  // 新增cors模块
 const app = express();
+
+// 使用cors中间件，允许所有域名访问
+app.use(cors());
 
 // 使用helmet 中间件增强express应用安全性, 会强制使用https
 app.use(helmet());
@@ -74,6 +78,8 @@ app.all('/login', async (req, res) => {
                 // 用户登录
                 res.json({ success: true, data: userInfo });
             }
+        } else {
+            res.status(200).json({ success: true, message: '缺少参数' });
         }
     } catch (err) {
         console.error('登录失败:', err);
