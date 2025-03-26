@@ -1,11 +1,33 @@
 {
   "dependencies": {
-    "axios": "^1.8.3",
+    "axios": "^1.8.4",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
     "express": "^4.21.2",
-    "helmet": "^8.0.0",
-    "mysql2": "^3.13.0",
+    "helmet": "^8.1.0",
+    "mysql2": "^3.14.0",
     "nodemon": "^3.1.9"
+  },
+  "name": "cocos_zyx_svr",
+  "version": "1.0.0",
+  "main": "loginManager.js",
+  "scripts": {
+    "start": "ts-node svr.ts",
+    "dev": "nodemon --exec ts-node svr.ts",
+    "build": "tsc",
+    "serve": "node dist/svr.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/body-parser": "^1.19.5",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.1",
+    "@types/helmet": "^0.0.48",
+    "@types/node": "^22.13.13",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
   }
 }
